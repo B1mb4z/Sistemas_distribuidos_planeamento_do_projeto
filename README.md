@@ -7,39 +7,39 @@ Abaixo está o conteúdo organizado. Como solicitado, utilizei o tema **Restaura
 # Trabalho: Centralizado vs Distribuído (API Gateway Simples)
 **Tema:** Sistema de Cardápio e Pedidos para Restaurante
 
-## 1. Pesquisa e Fundamentação Teórica
+## Pesquisa e Fundamentação Teórica
 
-### 1.1. Arquitetura Monolítica
+### Arquitetura Monolítica
 A arquitetura monolítica é o modelo tradicional de desenvolvimento de software onde toda a aplicação (Interface de Usuário, Regras de Negócio, Acesso a Dados) é construída como uma única unidade .
 - **Características:** Código-fonte único, base de dados centralizada, deploy único.
 - **Vantagens:** Simplicidade no desenvolvimento inicial, fácil depuração, menor latência interna (chamadas de função vs rede).
 - **Desvantagens:** Dificuldade para escalar (é preciso replicar o app inteiro), alta complexidade com o tempo (acoplamento), qualquer mudança exige rebuild total.
 
-### 1.2. Arquitetura Distribuída (Microservices)
+### Arquitetura Distribuída (Microservices)
 A arquitetura de microserviços estrutura a aplicação como um conjunto de serviços pequenos, independentes e focados em uma única funcionalidade .
 - **Características:** Serviços desacoplados, deploy independente, tecnologias podem variar entre serviços.
 - **Vantagens:** Escalabilidade horizontal seletiva (escala só o que precisa), resiliência (falha em um não derruba tudo), facilidade para atualizações.
 - **Desvantagens:** Complexidade operacional (orquestração), latência de rede, consistência eventual de dados.
 
-### 1.3. O Papel do API Gateway
+### O Papel do API Gateway
 O API Gateway atua como o "ponto único de entrada" para os clientes .
 - **Em Monolitos:** Funciona principalmente como um *Reverse Proxy* ou Load Balancer, direcionando tráfego para a aplicação principal .
 - **Em Microservices:** Tem papel ativo: roteamento inteligente, agregação de dados (compor resposta de vários serviços), autenticação (JWT) e observabilidade .
 
 ---
 
-## 2. Arquitetura Proposta (Tema: Restaurante)
+##  Arquitetura Proposta (Tema: Restaurante)
 
 Para a demonstração, implementaremos um sistema simples de **Cardápio e Pedidos**.
 
-### 2.1. Arquitetura Monolítica (Centralizada)
+### Arquitetura Monolítica (Centralizada)
 - **Estrutura:** Uma única aplicação (Node.js + Express) que contém:
     - Módulo `Menu`: Listar pratos.
     - Módulo `Orders`: Criar pedidos.
     - Banco de dados SQLite (único).
 - **Gateway:** Nginx agindo como proxy reverso simples.
 
-### 2.2. Arquitetura Distribuída (Microservices + Gateway)
+### Arquitetura Distribuída (Microservices + Gateway)
 - **Estrutura:**
     - **API Gateway (Porta 8080):** Ponto de entrada. Roteia requisições, valida JWT.
     - **Auth Service (Porta 8081):** Responsável por login/registro e emissão de tokens.
@@ -49,41 +49,10 @@ Para a demonstração, implementaremos um sistema simples de **Cardápio e Pedid
 
 ---
 
-## 3. Diagramas Comparativos
-
-### 3.1. Fluxo Monolítico
-```mermaid
-graph TD
-    Client[Cliente] -->|HTTP Request| Nginx[Nginx Reverse Proxy]
-    Nginx -->|Proxy Pass| Monolith[Sistema Monolítico<br>(Node.js)]
-    Monolith --> SQL[(SQL Database)]
-    SQL --> Monolith
-    Monolith --> Nginx
-    Nginx -->|HTTP Response| Client
-```
-
-### 3.2. Fluxo Distribuído (API Gateway)
-*Exemplo: Usuário faz login e depois consulta o cardápio.*
-```mermaid
-graph LR
-    Client[Cliente] -->|1. Login| Gateway[API Gateway<br>:8080]
-    Gateway -->|2. Credentials| Auth[Auth Service<br>:8081]
-    Auth -->|3. Gera JWT| Gateway
-    Gateway -->|4. Response + Token| Client
-    
-    Client -->|5. GET /menu + Token| Gateway
-    Gateway -->|6. Valida Token| Auth
-    Auth -->|7. OK| Gateway
-    Gateway -->|8. Request| Menu[Menu Service<br>:8082]
-    Menu -->|9. Data| Gateway
-    Gateway -->|10. Aggregated Data| Client
-```
-
----
 
 
 
-## 📊 Comparação de Resultados
+## Comparação de Resultados
 
 | Característica | Monolito | Microservices + Gateway |
 | :--- | :--- | :--- |
@@ -101,7 +70,7 @@ graph LR
 - **Proxy Reverso (Nginx vs Código):** No monolito, o Nginx age como um simples redirecionador. Nos microservices, o Gateway (código puro) age como um **orquestrador**, agregando dados quando necessário.
 
 
-## 5. Scripts de Código (Exemplo Base)
+## Scripts de Código (Exemplo Base)
 
 **`microservices/api-gateway/server.js`**
 ```javascript
