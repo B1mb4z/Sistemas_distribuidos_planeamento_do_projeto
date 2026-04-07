@@ -27,7 +27,3 @@ O API Gateway atua como o "ponto único de entrada" para os clientes .
 - **Em Microservices:** Tem papel ativo: roteamento inteligente, agregação de dados (compor resposta de vários serviços), autenticação (JWT) e observabilidade .
 
 ---
-
-080'));
-```
-
