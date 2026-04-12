@@ -31,7 +31,3 @@ def tratar_pedidos():
 
 if __name__ == "__main__":
     app.run(port=5000)
-
-cd micro_servico/servico_a && python app.py   # terminal 1
-cd micro_servico/servico_b && python app.py   # terminal 2
-cd micro_servico/gateway && python gateway.py # terminal 3
