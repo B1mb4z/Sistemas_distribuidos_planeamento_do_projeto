@@ -1,6 +1,3 @@
-Com base no PDF que você forneceu, estruturei o **README.md** e o restante da documentação teórica necessária para o trabalho.
-
-Abaixo está o conteúdo organizado. Como solicitado, utilizei o tema **Restaurante** para a implementação prática. Este material cobre a pesquisa teórica, as instruções de configuração e a documentação das arquiteturas.
 
 ---
 
