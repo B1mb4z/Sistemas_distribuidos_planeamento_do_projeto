@@ -12,7 +12,7 @@ def get_items():
     data = request.get_data()
     
     if not data or "nome" not in data:
-        return jsonify({"erro":"O nome é obrigatório."}), 400
+        return jsonify({"erro":"O nome e obrigatorio."}), 400
     novo_item = {"id": len(itens + 1), "nome": data["nome"] }
     itens.append(novo_item)
     
