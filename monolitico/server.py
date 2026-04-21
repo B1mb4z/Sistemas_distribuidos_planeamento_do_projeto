@@ -38,7 +38,6 @@ def add_pedidos():
     }
 
 
-
     pedidos.append(novo_pedido)
     return jsonify(novo_pedido), 201
 
