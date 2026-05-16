@@ -9,7 +9,7 @@ def get_pedidos():
 
 @app.route('/pedidos', methods=['POST'])
 def add_pedido():
-    data = request.get_json()  # get_json(), não get_jsonify()
+    data = request.get_json() 
 
     if not data or 'item_id' not in data or 'quantidade' not in data:
         return jsonify({'erro': 'É obrigatório preencher item_id e quantidade.'}), 400
