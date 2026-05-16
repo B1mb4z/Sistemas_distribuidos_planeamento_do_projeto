@@ -1,7 +1,7 @@
+import sys
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-
 itens = []
 pedidos = []
 
@@ -46,4 +46,6 @@ def add_pedidos():
 
 
 if __name__ == "__main__":
-    app.run(port =3000, debug=True)
+    porta = (sys.argv[1]) if len(sys.argv) > 1 else 3000
+    print(f"[Monolitico] a correr na porta {porta}")
+    app.run(port=porta, debug=True)
