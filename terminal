@@ -1,0 +1,7 @@
+Terminal        Comando
+    1           python server.py 4001
+    2           python server.py 4002
+    3           python balanceador_carga.py
+    4           python servico_a.py 3001
+    5           python servico_a.py 3003
+    6           python servico_b.py7python api_gateway.py

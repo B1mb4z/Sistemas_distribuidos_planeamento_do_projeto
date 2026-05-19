@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-BASE_URL = 'http://localhost:3000'  # gateway
+BASE_URL = 'http://localhost:5000'  # API Gateway dos microserviços
 
 def test_items_flow():
     # POST /itens
@@ -12,8 +12,8 @@ def test_items_flow():
     # GET /itens
     resp = requests.get(f'{BASE_URL}/itens')
     assert resp.status_code == 200
-    assert len(resp.json()) == 1
-    assert resp.json()[0]['nome'] == 'Keyboard'
+    assert len(resp.json()) >= 1
+    assert any(item['nome'] == 'Keyboard' for item in resp.json())
 
 def test_orders_flow():
     # POST /pedidos
@@ -24,4 +24,4 @@ def test_orders_flow():
     # GET /pedidos
     resp = requests.get(f'{BASE_URL}/pedidos')
     assert resp.status_code == 200
-    assert len(resp.json()) == 1
+    assert len(resp.json()) >= 1

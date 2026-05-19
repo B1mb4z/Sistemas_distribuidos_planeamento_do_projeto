@@ -7,16 +7,16 @@ pedidos = []
 
 @app.route("/itens", methods=["GET"])
 def get_items():
-    return jsonify(itens)  # GET só lista, não cria
+    return jsonify(itens)
 
 @app.route("/itens", methods=["POST"])
 def add_item():
-    data = request.get_json()  # get_json(), não get_data()
+    data = request.get_json()
 
     if not data or "nome" not in data:
         return jsonify({"erro": "O nome é obrigatório."}), 400
 
-    novo_item = {"id": len(itens) + 1, "nome": data["nome"]}  # len(itens) + 1
+    novo_item = {"id": len(itens) + 1, "nome": data["nome"]}
     itens.append(novo_item)
     return jsonify(novo_item), 201
 
@@ -26,13 +26,13 @@ def get_pedidos():
 
 @app.route('/pedidos', methods=['POST'])
 def add_pedido():
-    data = request.get_json()  # get_json(), não get_jsonify()
+    data = request.get_json()
 
     if not data or 'item_id' not in data or 'quantidade' not in data:
         return jsonify({'erro': 'É necessário colocar item_id e quantidade.'}), 400
 
     novo_pedido = {
-        "id_pedido": len(pedidos) + 1,  # len(pedidos) + 1
+        "id_pedido": len(pedidos) + 1,
         'item_id': data['item_id'],
         'quantidade': data['quantidade']
     }
@@ -40,4 +40,6 @@ def add_pedido():
     return jsonify(novo_pedido), 201
 
 if __name__ == "__main__":
-    app.run(port=3000, debug=True)
+    PORTA = int(sys.argv[1]) if len(sys.argv) > 1 else 4001
+    print(f"[Monolito] A correr na porta {PORTA}")
+    app.run(port=PORTA, threaded=True)

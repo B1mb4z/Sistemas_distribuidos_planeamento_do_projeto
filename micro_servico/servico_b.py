@@ -1,46 +1,30 @@
-# micro_servico/api_gateway.py
+# micro_servico/servico_b.py
 from flask import Flask, request, jsonify
-import requests
 
 app = Flask(__name__)
+pedidos = []
 
-# Duas instâncias do Serviço A
-INSTANCIAS_SERVICO_A = [
-    "http://localhost:3001",
-    "http://localhost:3003"   # segunda instância
-]
+@app.route('/pedidos', methods=['GET'])
+def get_pedidos():
+    print("[Serviço B] GET /pedidos")
+    return jsonify(pedidos)
 
-SERVICO_B_URL = "http://localhost:3002"
+@app.route('/pedidos', methods=['POST'])
+def add_pedido():
+    data = request.get_json()
 
-# Contador para round-robin
-contador_a = [0]
+    if not data or 'item_id' not in data or 'quantidade' not in data:
+        return jsonify({'erro': 'É necessário colocar item_id e quantidade.'}), 400
 
-def proxima_instancia_a():
-    instancia = INSTANCIAS_SERVICO_A[contador_a[0] % len(INSTANCIAS_SERVICO_A)]
-    contador_a[0] += 1
-    print(f"[API Gateway] Serviço A -> {instancia}")
-    return instancia
+    novo_pedido = {
+        "id_pedido": len(pedidos) + 1,
+        'item_id': data['item_id'],
+        'quantidade': data['quantidade']
+    }
+    pedidos.append(novo_pedido)
+    print(f"[Serviço B] Pedido criado: {novo_pedido}")
+    return jsonify(novo_pedido), 201
 
-@app.route('/itens', methods=['GET', 'POST'])
-def tratar_itens():
-    url = f"{proxima_instancia_a()}/itens"
-    
-    if request.method == 'GET':
-        resp = requests.get(url)
-    elif request.method == 'POST':
-        resp = requests.post(url, json=request.get_json())
-    
-    return jsonify(resp.json()), resp.status_code
-
-@app.route('/pedidos', methods=['GET', 'POST'])
-def tratar_pedidos():
-    if request.method == 'GET':
-        resp = requests.get(f'{SERVICO_B_URL}/pedidos')
-    elif request.method == 'POST':
-        resp = requests.post(f'{SERVICO_B_URL}/pedidos', json=request.get_json())
-    
-    return jsonify(resp.json()), resp.status_code
-
-if __name__ == "__main__":
-    print("[API Gateway] A correr na porta 5000")
-    app.run(port=5000)
+if __name__ == '__main__':
+    print("[Serviço B] A correr na porta 3002")
+    app.run(port=3002, threaded=True)

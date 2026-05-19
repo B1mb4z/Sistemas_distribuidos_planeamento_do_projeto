@@ -1,10 +1,10 @@
 import pytest
-from monolitico.server import app  # 'app', não 'server'
+from monolitico import server  # server.py na mesma pasta/raiz do projeto
 
-@pytest.fixture  # decorador obrigatório para o pytest reconhecer como fixture
+@pytest.fixture
 def cliente():
-    app.config['TESTING'] = True
-    with app.test_client() as c:
+    server.config['TESTING'] = True
+    with server.test_client() as c:
         yield c
 
 def test_get_items_empty(cliente):
